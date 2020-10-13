@@ -1,11 +1,5 @@
 Vagrant.configure("2") do |config|
  config.vm.box       = "ubuntu/bionic64"
- #config.vm.hostname  = "ubuntu" #hostname, requires reload
- #config.ssh.username = 'vagrant'
- #config.ssh.password = 'vagrant'
- #config.ssh.private_key_path = "~/.ssh/id_rsa"
- #config.ssh.forward_agent = true
-
  config.vm.define 'server-1' do |s|
   s.vm.provider :virtualbox do |v|
     v.name = 'AT12SAL01'
@@ -13,7 +7,6 @@ Vagrant.configure("2") do |config|
     v.cpus = 2
   end
   s.vm.provision "docker"
-  s.vm.provision "shell", path: "scripts/jenkis.sh"
+  s.vm.provision "shell", path: "scripts/install_jenkins.sh"
  end
-
 end
