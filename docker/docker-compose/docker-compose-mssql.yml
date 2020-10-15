@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  mssql_server:
+    image: registry.jala.info/devops/mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql
+    restart: always
+    ports: 
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "${SA_PASSWORD}"
+      MSSQL_PID: Express
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - mssql_network
+volumes: 
+  mssql_data:
+    name: mssql_data
+networks:
+  mssql_network:
+    name: mssql_network
+  #  driver: bridge
+  #  ipam:
+  #    config:
+  #      - subnet: 192.10.10.0/28
+  #  driver_opts:
+  #    com.docker.network.driver.mtu: 1400
