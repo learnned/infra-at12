@@ -19,6 +19,11 @@ Vagrant.configure('2') do |config |
       os.server_name        = 'AT12SALO01'
     end
   end
-  config.vm.provision "docker"
-  config.vm.provision :shell, path: "scripts/docker-jenkins.sh"
+
+  config.vm.provision :docker do |docker|
+    docker.run "jenkins",
+      image: "registry.jala.info/devops/jenkins/jenkins:2.255-alpine",
+      args: "-p 80:8080 " +
+        "-v jenkins_home:/var/jenkins_home"
+  end
 end
