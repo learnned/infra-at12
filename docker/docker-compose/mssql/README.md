@@ -1,11 +1,14 @@
 # mssql Sql Server
 
+## Requirements
+ope port 1443
+
 ## Execute
 ```
 vagrant up
 ```
 
-## How to connect to container 
+## How to connect to the container 
 ```
 docker pull mcr.microsoft.com/mssql/server:2019-latest
 docker run -it mcr.microsoft.com/mssql/server:2019-latest bash
