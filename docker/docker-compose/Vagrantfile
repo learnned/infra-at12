@@ -19,6 +19,15 @@ Vagrant.configure('2') do |config |
       os.server_name        = 'AT12SALO01'
     end
   end
+  
   config.vm.provision "docker"
   config.vm.provision "docker_compose"
+  
+  config.vm.provision "file", source: ".env", destination: "/home/ubuntu/.env"
+  config.vm.provision "file", source: "docker-compose-mssql.yml", destination: "/home/ubuntu/docker-compose-mssql.yml"
+  config.vm.provision "shell", inline: "docker-compose -f docker-compose-mssql.yml up -d"
+  config.vm.provision "shell", inline: "rm /home/ubuntu/.env"
+
+  config.vm.provision "file", source: "docker-compose-blueocean.yml", destination: "/home/ubuntu/docker-compose-blueocean.yml"
+  config.vm.provision "shell", inline: "docker-compose -f docker-compose-blueocean.yml up -d"
 end
