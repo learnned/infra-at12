@@ -33,5 +33,15 @@ Vagrant.configure('2') do |config |
     s.vm.provision "shell", inline: "docker-compose up -d"
     s.vm.provision "shell", inline: "rm /home/ubuntu/*.env"
     s.vm.provision "shell", inline: "rm /home/ubuntu/*.yml"
+  
+    s.vm.provision "file", source: ".env", destination: "/home/ubuntu/.env"
+    s.vm.provision "file", source: "docker-compose-mssql.yml", destination: "/home/ubuntu/docker-compose-mssql.yml"
+    s.vm.provision "shell", inline: "docker-compose -f docker-compose-mssql.yml up -d"
+    s.vm.provision "shell", inline: "rm /home/ubuntu/.env"
+    s.vm.provision "file", source: "docker-compose-blueocean.yml", destination: "/home/ubuntu/docker-compose-blueocean.yml"
+    s.vm.provision "shell", inline: "docker-compose -f docker-compose-blueocean.yml up -d"
+
   end
 end
+  
+
