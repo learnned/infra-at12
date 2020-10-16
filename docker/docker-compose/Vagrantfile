@@ -14,11 +14,24 @@ Vagrant.configure('2') do |config |
     override.vm.synced_folder '.', '/vagrant', disabled: true
   end
 
+  config.vm.provision "docker"
+  config.vm.provision "docker_compose"
+
   config.vm.define 'server-1' do |s|
     s.vm.provider :openstack do |os|
       os.server_name        = 'AT12SALO01'
     end
   end
-  config.vm.provision "docker"
-  config.vm.provision "docker_compose"
+
+  config.vm.define 'sonarqube' do |s|
+    s.vm.provider :openstack do |os|
+      os.server_name        = 'AT12SALO02'
+    end
+    s.vm.provision "file", source: "sonarqube/database.env", destination: "/home/ubuntu/database.env"
+    s.vm.provision "file", source: "sonarqube/sonar.env", destination: "/home/ubuntu/sonar.env"
+    s.vm.provision "file", source: "sonarqube/docker-compose.yml", destination: "/home/ubuntu/docker-compose.yml"
+    s.vm.provision "shell", inline: "docker-compose up -d"
+    s.vm.provision "shell", inline: "rm /home/ubuntu/*.env"
+    s.vm.provision "shell", inline: "rm /home/ubuntu/*.yml"
+  end
 end
