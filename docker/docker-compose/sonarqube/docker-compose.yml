@@ -1,0 +1,47 @@
+version: "3.7"
+services: 
+  sonarqube_server:
+    image: registry.jala.info/devops/sonarqube:8.4.2-community
+    depends_on:
+      - postgres_db_server
+    env_file:
+      - sonar.env
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_temp:/opt/sonarqube/temp
+    networks:
+      - sonar_network
+    ports:
+      - "9000:9000"
+  postgres_db_server:
+    image: registry.jala.info/devops/postgres:12.4-alpine
+    env_file:
+      - database.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - sonar_network
+
+volumes:
+  sonarqube_data:
+    name: sonarqube_data
+  sonarqube_extensions:
+    name: sonarqube_extensions
+  sonarqube_logs:
+    name: sonarqube_logs
+  sonarqube_temp:
+    name: sonarqube_temp
+  postgres_data:
+    name: postgres_data
+
+networks:
+  sonar_network:
+    name: sonar_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.10.10.0/28
+    driver_opts:
+      com.docker.network.driver.mtu: 1400
