@@ -33,6 +33,7 @@ Vagrant.configure('2') do |config |
     s.vm.provider :openstack do |os|
       os.server_name        = 'AT12SALO02'
     end
+    s.vm.provision "shell", inline: "chmod a+rw /var/run/docker.sock"
     s.vm.provision "file", source: "docker-compose/blueocean/docker-compose.yml", destination: "/home/ubuntu/docker-compose.yml"
     s.vm.provision "shell", inline: "docker-compose -f docker-compose.yml up -d"
     s.vm.provision "shell", inline: "rm /home/ubuntu/*.yml"
