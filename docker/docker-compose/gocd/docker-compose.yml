@@ -1,0 +1,34 @@
+version: "3.7"
+services: 
+  gocd-server:
+    image: registry.jala.info/devops/gocd/gocd-server:v20.7.0
+    networks:
+      - gocd_network
+    ports:
+      - "8153:8153"
+      - "8154:8154"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  gocd-agent:
+    image: registry.jala.info/devops/gocd/gocd-agent-alpine-3.12:v20.7.0
+    depends_on: 
+      - gocd-server
+    environment: 
+      GO_SERVER_URL: http://gocd-server:8153/go
+    networks:
+      - gocd_network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  gocd_data:
+    name: gocd_data
+
+networks:
+  gocd_network:
+    name: gocd_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.10.10.0/28
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

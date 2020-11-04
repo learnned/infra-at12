@@ -60,4 +60,12 @@ Vagrant.configure('2') do |config |
     s.vm.provision "shell", inline: "rm /home/ubuntu/*.env"
     s.vm.provision "shell", inline: "rm /home/ubuntu/docker-compose.yml"
   end
+  # gocd
+  config.vm.define 'server-5' do |s|
+    s.vm.provider :openstack do |os|
+      os.server_name        = 'AT12SALO05'
+    end
+    s.vm.provision "file", source: "docker-compose/gocd/docker-compose.yml", destination: "/home/ubuntu/docker-compose.yml"
+    s.vm.provision "shell", inline: "docker-compose up -d"
+  end
 end
